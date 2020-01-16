@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Customer</string>
+    <!--    <string name="app_name">ModernLogin</string>-->
+    <string name="login_email_hint">Email</string>
+    <string name="login_password_hint">Password</string>
+    <!--    <string name="default_web_client_id">558755377206-s5k4ol9ekjk273r8olp1173p3lch6qal.apps.googleusercontent.com</string>-->
+</resources>
