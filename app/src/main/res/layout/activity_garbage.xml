@@ -1,9 +1,209 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Garbage">
+    tools:context=".Garbage"
+    android:background="@color/register_bk_color"
+    android:focusableInTouchMode="true"
+    android:gravity="center"
+    android:layout_gravity="center">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:layout_marginTop="30dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    style="@style/viewParent.headerText.NoMode"
+                    android:textColor="@color/whiteTextColor"
+                    android:text="What\nyou\nHave? \n "/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="120dp"
+                    android:src="@drawable/ic_login_hero"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"/>
+            </RelativeLayout>
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:cardBackgroundColor="@color/whiteTextColor"
+                app:cardCornerRadius="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <CheckBox
+                            android:layout_marginTop="40dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:id="@+id/newspaper"/>
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/textInputNewspaper"
+                            style="@style/parent"
+                            android:layout_marginTop="@dimen/loginViewsMargin">
+                            <EditText
+                                android:id="@+id/editTextNewspaper"
+                                style="@style/modifiedEditText"
+                                android:inputType="number"
+                                android:maxLines="1"
+                                android:hint="Newspaper\t Rs. 10/kg"
+                                android:visibility="invisible"
+                                />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <CheckBox
+                            android:layout_marginTop="40dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:id="@+id/Paper"/>
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/textInputPaper"
+                            style="@style/parent"
+                            android:layout_marginTop="@dimen/loginViewsMargin">
+                            <EditText
+                                android:id="@+id/editTextPaper"
+                                style="@style/modifiedEditText"
+                                android:inputType="number"
+                                android:maxLines="1"
+                                android:hint="Paper(used copies)\t Rs. 7/kg"
+                                android:visibility="invisible"
+                                />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <CheckBox
+                            android:layout_marginTop="40dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:id="@+id/tins"/>
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/textInputTins"
+                            style="@style/parent"
+                            android:layout_marginTop="@dimen/loginViewsMargin">
+                            <EditText
+                                android:id="@+id/editTextTins"
+                                style="@style/modifiedEditText"
+                                android:inputType="number"
+                                android:maxLines="1"
+                                android:hint="Tins\t Rs. 15/kg"
+                                android:visibility="invisible"
+                                />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <CheckBox
+                            android:layout_marginTop="40dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:id="@+id/Plastic"/>
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/textInputPlastic"
+                            style="@style/parent"
+                            android:layout_marginTop="@dimen/loginViewsMargin">
+                            <EditText
+                                android:id="@+id/editTextPlastic"
+                                style="@style/modifiedEditText"
+                                android:inputType="number"
+                                android:maxLines="1"
+                                android:hint="Plastic\t Rs. 7/kg"
+                                android:visibility="invisible"
+                                />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <CheckBox
+                            android:layout_marginTop="40dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:id="@+id/Cans"/>
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/textInputCans"
+                            style="@style/parent"
+                            android:layout_marginTop="@dimen/loginViewsMargin">
+                            <EditText
+                                android:id="@+id/editTextCans"
+                                style="@style/modifiedEditText"
+                                android:inputType="number"
+                                android:maxLines="1"
+                                android:hint="Metallic Cans\t Rs. 8/kg"
+                                android:visibility="invisible"
+                                />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
+                    <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+                        android:id="@+id/Done"
+                        style="@style/loginButton"
+                        app:spinning_bar_width="4dp"
+                        app:spinning_bar_color="#FFF"
+                        android:text="Done"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/loginViewsMargin"
+                        app:initialCornerAngle="27dp"
+                        app:spinning_bar_padding="6dp"/>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+            <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+                android:id="@+id/Logout"
+                style="@style/logoutButton"
+                app:spinning_bar_width="4dp"
+                app:spinning_bar_color="#FFF"
+                android:textColor="@color/themeColor"
+                android:text="Logout"
+                android:layout_weight="0.5"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/loginViewsMargin"
+                app:initialCornerAngle="27dp"
+                app:spinning_bar_padding="6dp"/>
+        </LinearLayout>
+
+    </ScrollView>
+</RelativeLayout>

@@ -55,4 +55,9 @@
         <item name="android:paddingLeft">5dp</item>
     </style>
 
+    <style name="logoutButton" parent="viewParent">
+        <item name="android:background">@drawable/button_background_white</item>
+        <item name="android:textColor">@color/themeColor</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

@@ -2,12 +2,16 @@ package com.example.customer;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -130,11 +134,16 @@ public class Login extends AppCompatActivity {
             String personId = account.getId();
             Uri personPhoto = account.getPhotoUrl();
             String userId=getUserId(personEmail);
-            Toast.makeText(Login.this,userId+"123 "+personName + personEmail ,Toast.LENGTH_SHORT).show();
-            checkUser(userId);
+//            Toast.makeText(Login.this,userId+"123 "+personName + personEmail ,Toast.LENGTH_SHORT).show();
+            Customer customer=checkUser(userId);
+            Intent intent=new Intent(Login.this,Garbage.class);
+            intent.putExtra("userId",userId);
+            intent.putExtra("current",customer);
+            startActivity(intent);
         }
 
     }
+
     private String getUserId(String emai){
         String input="";
         for(int i=0;i<emai.length();i++)
@@ -146,18 +155,20 @@ public class Login extends AppCompatActivity {
         return input;
     }
 
-    private void checkUser(String userId){
+    private Customer checkUser(String userId){
         FirebaseDatabase database=FirebaseDatabase.getInstance();
         final DatabaseReference myRef=database.getReference("customers").child(userId);
 //        Customer customer=myRef.
+        final Customer[] customer = new Customer[1];
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.exists()) {
                     GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
-                    Customer customer=new Customer(account.getDisplayName(),"0",null,account.getEmail(),true);
-                    myRef.setValue(customer);
-                }
+                    customer[0] =new Customer(account.getDisplayName(),"0",null,account.getEmail(),null,true);
+                    myRef.setValue(customer[0]);
+                }else
+                    customer[0]=dataSnapshot.getValue(Customer.class);
             }
 
             @Override
@@ -166,23 +177,28 @@ public class Login extends AppCompatActivity {
             }
         });
 
+        return customer[0];
         }
     //Normal Login
     public void LoginAction(View view) {
-        mAuth.signInWithEmailAndPassword(email.getText().toString().trim(),password.getText().toString().trim())
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(Login.this,"Login Successful",Toast.LENGTH_LONG).show();
-                            FirebaseUser user=mAuth.getCurrentUser();
-                            updateUI(user);
-                        }else{
-                            Toast.makeText(Login.this,"Login Failed",Toast.LENGTH_LONG).show();
-                            updateUI(null);
+        if(email.getText().toString().trim().equals("") || password.getText().toString().trim().equals(""))
+            Toast.makeText(Login.this,"Please complete details first!",Toast.LENGTH_SHORT).show();
+        else {
+            mAuth.signInWithEmailAndPassword(email.getText().toString().trim(), password.getText().toString().trim())
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_LONG).show();
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                updateUI(user);
+                            } else {
+                                Toast.makeText(Login.this, "Login Failed ", Toast.LENGTH_LONG).show();
+                                updateUI(null);
+                            }
                         }
-                    }
-                });
+                    });
+        }
     }
 
     private void updateUI(FirebaseUser account){
@@ -195,7 +211,12 @@ public class Login extends AppCompatActivity {
 //            String personId = account.getId();
             Uri personPhoto = account.getPhotoUrl();
 
-            Toast.makeText(Login.this,personName + personEmail ,Toast.LENGTH_SHORT).show();
+//            Toast.makeText(Login.this,personName + personEmail ,Toast.LENGTH_SHORT).show();
+            String userId=getUserId(personEmail);
+            Intent intent=new Intent(Login.this,Garbage.class);
+            intent.putExtra("userId",userId);
+            intent.putExtra("current",extractCustomer(userId));
+            startActivity(intent);
         }
 
     }
@@ -204,6 +225,66 @@ public class Login extends AppCompatActivity {
     public void onLoginClick(View View){
         startActivity(new Intent(this,Register.class));
         overridePendingTransition(R.anim.slide_in_right,R.anim.stay);
+        finish();
+    }
 
+    private Customer customer1;
+
+    public Customer extractCustomer(String userId){
+        DatabaseReference myRef= FirebaseDatabase.getInstance().getReference("customers").child(userId);
+        customer1=null;
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                customer1=dataSnapshot.getValue(Customer.class);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("DatabaseFetchError",databaseError+"");
+            }
+        });
+        return customer1;
+    }
+
+    public void ForgotPassword(View view) {
+        final String[] m_Text = {""};
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Reset Password link");
+
+// Set up the input
+        final EditText input = new EditText(this);
+// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setHint("Email");
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+// Set up the buttons
+        builder.setPositiveButton("Send Link", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialog, int which) {
+                m_Text[0] = input.getText().toString();
+                FirebaseAuth.getInstance().sendPasswordResetEmail(m_Text[0])
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Log.d("TAG", "Email sent.");
+                                    Toast.makeText(Login.this,"Password reset link sent to mail",Toast.LENGTH_LONG).show();
+                                }
+                                dialog.cancel();
+                            }
+                        });
+
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
     }
 }
