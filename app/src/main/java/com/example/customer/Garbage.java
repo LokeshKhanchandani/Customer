@@ -42,6 +42,7 @@ public class Garbage extends AppCompatActivity {
     private Customer customer;
     private Waste waste1;
     private TextView news,copies,tins,plastic,cans;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -215,7 +216,9 @@ public class Garbage extends AppCompatActivity {
                 tinsT.setClickable(false);
                 plasticT.setClickable(false);
                 cansT.setClickable(false);
-                final Waste waste=new Waste(n,p,t,pl,c,customer.username);
+                Long tslong=System.currentTimeMillis()/1000;
+                customer.lastused=tslong.toString();
+                final Waste waste=new Waste(n,p,t,pl,c,customer.username,customer.address,customer.phone,userId);
                 final String user=getUserId(customer.email);
 //                List<Address> addresses=updateLocation(customer);
                 FusedLocationProviderClient fusedLocationClient;
@@ -237,7 +240,7 @@ public class Garbage extends AppCompatActivity {
                                             customer.city="Agra";
                                             waste.address="Bhagwan Talkies";
                                         }
-                                        myRef=FirebaseDatabase.getInstance().getReference("garbage").child(customer.city).child(user);
+                                        myRef=FirebaseDatabase.getInstance().getReference("garbage").child(customer.city).child(user+customer.lastused);
 //        Customer customer=myRef.
 
 
@@ -292,7 +295,7 @@ public class Garbage extends AppCompatActivity {
         });
 
         final String userid=getUserId(customer.email);
-        myRef=FirebaseDatabase.getInstance().getReference("garbage").child(customer.city).child(userid);
+        myRef=FirebaseDatabase.getInstance().getReference("garbage").child(customer.city).child(userid+customer.lastused);
         waste1=null;
         myRef.addValueEventListener(new ValueEventListener() {
             @Override

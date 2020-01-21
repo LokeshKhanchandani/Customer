@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class Customer implements Serializable {
 
-    public String username,phone,address,email,city;
+    public String username,phone,address,email,city,lastused;
     public boolean picked;
     Customer(){}
 
@@ -16,6 +16,6 @@ public class Customer implements Serializable {
         this.picked=picked;
         this.city=city;
         if(city==null)
-            this.city="Lucknow";
+            this.city="Agra";
     }
 }
