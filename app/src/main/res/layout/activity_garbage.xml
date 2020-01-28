@@ -191,18 +191,18 @@
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-            <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
-                android:id="@+id/Logout"
-                style="@style/logoutButton"
-                app:spinning_bar_width="4dp"
-                app:spinning_bar_color="#FFF"
-                android:textColor="@color/themeColor"
-                android:text="Logout"
-                android:layout_weight="0.5"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/loginViewsMargin"
-                app:initialCornerAngle="27dp"
-                app:spinning_bar_padding="6dp"/>
+<!--            <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton-->
+<!--                android:id="@+id/Logout"-->
+<!--                style="@style/logoutButton"-->
+<!--                app:spinning_bar_width="4dp"-->
+<!--                app:spinning_bar_color="#FFF"-->
+<!--                android:textColor="@color/themeColor"-->
+<!--                android:text="Logout"-->
+<!--                android:layout_weight="0.5"-->
+<!--                android:layout_gravity="center_horizontal"-->
+<!--                android:layout_marginTop="@dimen/loginViewsMargin"-->
+<!--                app:initialCornerAngle="27dp"-->
+<!--                app:spinning_bar_padding="6dp"/>-->
         </LinearLayout>
 
     </ScrollView>

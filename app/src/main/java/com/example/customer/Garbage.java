@@ -37,46 +37,50 @@ import static java.util.Locale.getDefault;
 
 public class Garbage extends AppCompatActivity {
     private String userId;
-    private DatabaseReference myRef;
+    private DatabaseReference myRef,myRef1;
     private Button done,logout;
     private Customer customer;
-    private Waste waste1;
-    private TextView news,copies,tins,plastic,cans;
+    ValueEventListener eventListener1,eventListener2;
 
+    private TextView news,copies,tins,plastic,cans;
+    private Customer intentCustomer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-        userId=getIntent().getExtras().getString("userId");
+        setContentView(R.layout.activity_garbage);
+        intentCustomer= (Customer) getIntent().getExtras().getSerializable("customer");
+        userId=getUserId(intentCustomer.email);
+        fillForm();
+//        userId=getIntent().getExtras().getString("userId");
 //        customer= (Customer) getIntent().getExtras().getSerializable("current");
 //        if(customer==null){
 //            Toast.makeText(Garbage.this,"Customer data not present!",Toast.LENGTH_LONG).show();
 //            finish();
 //        }
-        myRef= FirebaseDatabase.getInstance().getReference("customers").child(userId);
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                customer=dataSnapshot.getValue(Customer.class);
 
-                if(customer.picked){
-                    setContentView(R.layout.activity_garbage);
-//                    Toast.makeText(Garbage.this,"chala",Toast.LENGTH_LONG).show();
-                    fillForm();
-                }
-
-                else {
-                    setContentView(R.layout.pending);
-                    showRequest();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+//        myRef= FirebaseDatabase.getInstance().getReference("customers").child(userId);
+//        myRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                customer=dataSnapshot.getValue(Customer.class);
+//
+//                if(customer.picked){
+//                    setContentView(R.layout.activity_garbage);
+////                    Toast.makeText(Garbage.this,"chala",Toast.LENGTH_LONG).show();
+//                    fillForm();
+//                }
+//
+//                else {
+//                    setContentView(R.layout.pending);
+//                    showRequest();
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
 
     }
@@ -91,29 +95,24 @@ public class Garbage extends AppCompatActivity {
         return input;
     }
 
-    private void update(final Customer customer){
-        String user=getUserId(customer.email);
-        final DatabaseReference myRef=FirebaseDatabase.getInstance().getReference("customers").child(user);
-        customer.picked=false;
-        Toast.makeText(Garbage.this,"Updating Location",Toast.LENGTH_LONG).show();
+//    private void update(final Customer customer){
 
-        final Customer newcustomer=customer;
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    myRef.setValue(newcustomer);
-                    //send intent to about us activity
-//                    finish();
-//                    Intent i=new Intent(Garbage.this,About.class);
-//                    startActivity(i);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
+//        myRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+//                    //send intent to about us activity
+////                    finish();
+////                    Intent i=new Intent(Garbage.this,About.class);
+////                    startActivity(i);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
 
     public void fillForm(){
@@ -129,13 +128,13 @@ public class Garbage extends AppCompatActivity {
         tinsT=findViewById(R.id.editTextTins);
         plasticT=findViewById(R.id.editTextPlastic);
         cansT=findViewById(R.id.editTextCans);
-        logout = findViewById(R.id.Logout);
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+//        logout = findViewById(R.id.Logout);
+//        logout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                finish();
+//            }
+//        });
         news.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -217,7 +216,8 @@ public class Garbage extends AppCompatActivity {
                 plasticT.setClickable(false);
                 cansT.setClickable(false);
                 Long tslong=System.currentTimeMillis()/1000;
-                customer.lastused=tslong.toString();
+                intentCustomer.lastused=tslong.toString();
+                customer=intentCustomer;
                 final Waste waste=new Waste(n,p,t,pl,c,customer.username,customer.address,customer.phone,userId);
                 final String user=getUserId(customer.email);
 //                List<Address> addresses=updateLocation(customer);
@@ -240,25 +240,40 @@ public class Garbage extends AppCompatActivity {
                                             customer.city="Agra";
                                             waste.address="Bhagwan Talkies";
                                         }
+                                        customer.picked=false;
                                         myRef=FirebaseDatabase.getInstance().getReference("garbage").child(customer.city).child(user+customer.lastused);
 //        Customer customer=myRef.
+                                        myRef.setValue(waste);
+                                        myRef=null;
+                                        Toast.makeText(Garbage.this,"Your Request is successfully sent",Toast.LENGTH_SHORT).show();
+                                        done.setVisibility(View.INVISIBLE);
+//                                        update(customer);
+                                        String user=getUserId(customer.email);
+                                        myRef1=FirebaseDatabase.getInstance().getReference("customers").child(getUserId(user));
 
+//        Toast.makeText(Garbage.this,"Updating Location",Toast.LENGTH_SHORT).show();
 
-
-                                        myRef.addValueEventListener(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                myRef.setValue(waste);
-                                                Toast.makeText(Garbage.this,"Your Request is successfully sent",Toast.LENGTH_LONG).show();
-                                                done.setVisibility(View.INVISIBLE);
-                                                update(customer);
-                                            }
-
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                            }
-                                        });
+//                                        final Customer newcustomer=customer;
+                                        myRef1.setValue(customer);
+                                        myRef1=null;
+                                        Intent i = new Intent(Garbage.this, Pending.class);
+                                        i.putExtra("userId", userId);
+                                        i.putExtra("customer",customer);
+                                        startActivity(i);
+                                        overridePendingTransition(R.anim.slide_in_right,R.anim.stay);
+                                        finish();
+//
+//                                        myRef.addValueEventListener(new ValueEventListener() {
+//                                            @Override
+//                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+//                                            }
+//
+//                                            @Override
+//                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                            }
+//                                        });
 
                                     } catch (IOException e) {
                                         e.printStackTrace();
@@ -280,63 +295,16 @@ public class Garbage extends AppCompatActivity {
         });
     }
 
-    public void showRequest(){
-        news=findViewById(R.id.newspaper);
-        copies=findViewById(R.id.copies);
-        tins=findViewById(R.id.tins);
-        plastic=findViewById(R.id.plastic);
-        cans=findViewById(R.id.cans);
-        logout = (Button)findViewById(R.id.Logout);
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(FirebaseDatabase.getInstance()!=null)
+            myRef=null;
+    }
 
-        final String userid=getUserId(customer.email);
-        myRef=FirebaseDatabase.getInstance().getReference("garbage").child(customer.city).child(userid+customer.lastused);
-        waste1=null;
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                waste1=dataSnapshot.getValue(Waste.class);
-                news.setText("Newspaper Rs 10/kg-\t "+waste1.newspaper);
-                copies.setText("Used Copies Rs 7/kg-\t "+waste1.paper);
-                tins.setText("Tins Rs 15/kg-\t\t "+waste1.tins);
-                plastic.setText("Plastic Rs 7/kg-\t "+waste1.plastic);
-                cans.setText("Metallic Cans Rs 8/kg-\t "+waste1.cans);
-
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-        Button contact,about;
-        contact=findViewById(R.id.ContactUs);
-        about=findViewById(R.id.About);
-        //need to change after merging git pr
-        contact.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_SENDTO);
-                intent.setData(Uri.parse("mailto:junkoscrap@gmail.com")); // only email apps should handle this
-                intent.putExtra(Intent.EXTRA_SUBJECT, "Query from "+customer.username);
-                if (intent.resolveActivity(getPackageManager()) != null) {
-                    startActivity(intent);
-                }
-            }
-        });
-        about.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i=new Intent(Garbage.this,About.class);
-                i.putExtra("userId",userid);
-                startActivity(i);
-            }
-        });
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        myRef=null;
     }
 }

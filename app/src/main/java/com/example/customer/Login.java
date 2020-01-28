@@ -45,8 +45,8 @@ import android.Manifest;
 
 public class Login extends AppCompatActivity {
 
-    private SignInButton signInButton;
-    private GoogleSignInClient mGoogleSignInClient;
+//    private SignInButton signInButton;
+//    private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
     private int RC_SIGN_IN = 1;
     private EditText email,password;
@@ -66,97 +66,97 @@ public class Login extends AppCompatActivity {
         provider = locationManager.getBestProvider(new Criteria(), false);
         checkLocationPermission();
 
-        signInButton = findViewById(R.id.sign_in_button);
+//        signInButton = findViewById(R.id.sign_in_button);
         mAuth = FirebaseAuth.getInstance();
         email=findViewById(R.id.editTextEmail);
         password=findViewById(R.id.editTextPassword);
 
         // Configure Google Sign In
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
+//        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                .requestIdToken(getString(R.string.default_web_client_id))
+//                .requestEmail()
+//                .build();
 
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+//        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                signIn();
-            }
-        });
+//        signInButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                signIn();
+//            }
+//        });
     }
 
     // Login with gmail
-    private void signIn(){
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
+//    private void signIn(){
+//        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+//        startActivityForResult(signInIntent, RC_SIGN_IN);
+//    }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == RC_SIGN_IN){
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleSignInResult(task);
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if(requestCode == RC_SIGN_IN){
+//            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+//            handleSignInResult(task);
+//        }
+//    }
 
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask){
-        try{
+//    private void handleSignInResult(Task<GoogleSignInAccount> completedTask){
+//        try{
+//
+//            GoogleSignInAccount acc = completedTask.getResult(ApiException.class);
+//            Toast.makeText(Login.this,"Signed In Successfully",Toast.LENGTH_SHORT).show();
+//            FirebaseGoogleAuth(acc);
+//        }
+//        catch (ApiException e){
+//            Toast.makeText(Login.this,"Sign In Failed",Toast.LENGTH_SHORT).show();
+//            FirebaseGoogleAuth(null);
+//        }
+//    }
 
-            GoogleSignInAccount acc = completedTask.getResult(ApiException.class);
-            Toast.makeText(Login.this,"Signed In Successfully",Toast.LENGTH_SHORT).show();
-            FirebaseGoogleAuth(acc);
-        }
-        catch (ApiException e){
-            Toast.makeText(Login.this,"Sign In Failed",Toast.LENGTH_SHORT).show();
-            FirebaseGoogleAuth(null);
-        }
-    }
+//    private void FirebaseGoogleAuth(GoogleSignInAccount acct) {
+//        //check if the account is null
+//        if (acct != null) {
+//            AuthCredential authCredential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+//            mAuth.signInWithCredential(authCredential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+//                @Override
+//                public void onComplete(@NonNull Task<AuthResult> task) {
+//                    if (task.isSuccessful()) {
+//                        Toast.makeText(Login.this, "Successful", Toast.LENGTH_SHORT).show();
+//                        FirebaseUser user = mAuth.getCurrentUser();
+//                        updategmailUI(user);
+//                    } else {
+//                        Toast.makeText(Login.this, "Failed", Toast.LENGTH_SHORT).show();
+//                        updategmailUI(null);
+//                    }
+//                }
+//            });
+//        }
+//        else{
+//            Toast.makeText(Login.this, "acc failed", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
-    private void FirebaseGoogleAuth(GoogleSignInAccount acct) {
-        //check if the account is null
-        if (acct != null) {
-            AuthCredential authCredential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-            mAuth.signInWithCredential(authCredential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(Login.this, "Successful", Toast.LENGTH_SHORT).show();
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        updategmailUI(user);
-                    } else {
-                        Toast.makeText(Login.this, "Failed", Toast.LENGTH_SHORT).show();
-                        updategmailUI(null);
-                    }
-                }
-            });
-        }
-        else{
-            Toast.makeText(Login.this, "acc failed", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void updategmailUI(FirebaseUser fuser){
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
-        if(account !=  null){
-            String personName = account.getDisplayName();
-            String personGivenName = account.getGivenName();
-            String personFamilyName = account.getFamilyName();
-            String personEmail = account.getEmail();
-            String personId = account.getId();
-            Uri personPhoto = account.getPhotoUrl();
-            String userId=getUserId(personEmail);
-//            Toast.makeText(Login.this,userId+"123 "+personName + personEmail ,Toast.LENGTH_SHORT).show();
-            Customer customer=checkUser(userId);
-            Intent intent=new Intent(Login.this,Garbage.class);
-            intent.putExtra("userId",userId);
-            intent.putExtra("current",customer);
-            startActivity(intent);
-        }
-
-    }
+//    private void updategmailUI(FirebaseUser fuser){
+//        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+//        if(account !=  null){
+//            String personName = account.getDisplayName();
+//            String personGivenName = account.getGivenName();
+//            String personFamilyName = account.getFamilyName();
+//            String personEmail = account.getEmail();
+//            String personId = account.getId();
+//            Uri personPhoto = account.getPhotoUrl();
+//            String userId=getUserId(personEmail);
+////            Toast.makeText(Login.this,userId+"123 "+personName + personEmail ,Toast.LENGTH_SHORT).show();
+//            Customer customer=checkUser(userId);
+//            Intent intent=new Intent(Login.this,Garbage.class);
+//            intent.putExtra("userId",userId);
+//            intent.putExtra("current",customer);
+//            startActivity(intent);
+//        }
+//
+//    }
 
     private String getUserId(String emai){
         String input="";
@@ -169,30 +169,30 @@ public class Login extends AppCompatActivity {
         return input;
     }
 
-    private Customer checkUser(String userId){
-        FirebaseDatabase database=FirebaseDatabase.getInstance();
-        final DatabaseReference myRef=database.getReference("customers").child(userId);
-//        Customer customer=myRef.
-        final Customer[] customer = new Customer[1];
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (!dataSnapshot.exists()) {
-                    GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
-                    customer[0] =new Customer(account.getDisplayName(),"0",null,account.getEmail(),null,true);
-                    myRef.setValue(customer[0]);
-                }else
-                    customer[0]=dataSnapshot.getValue(Customer.class);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-        return customer[0];
-        }
+//    private Customer checkUser(String userId){
+//        FirebaseDatabase database=FirebaseDatabase.getInstance();
+//        final DatabaseReference myRef=database.getReference("customers").child(userId);
+////        Customer customer=myRef.
+//        final Customer[] customer = new Customer[1];
+//        myRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                if (!dataSnapshot.exists()) {
+//                    GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+//                    customer[0] =new Customer(account.getDisplayName(),"0",null,account.getEmail(),null,true);
+//                    myRef.setValue(customer[0]);
+//                }else
+//                    customer[0]=dataSnapshot.getValue(Customer.class);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//
+//        return customer[0];
+//        }
     //Normal Login
     public void LoginAction(View view) {
         if(email.getText().toString().trim().equals("") || password.getText().toString().trim().equals(""))
@@ -203,11 +203,11 @@ public class Login extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_LONG).show();
+                                Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_SHORT).show();
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 updateUI(user);
                             } else {
-                                Toast.makeText(Login.this, "Login Failed ", Toast.LENGTH_LONG).show();
+                                Toast.makeText(Login.this, task.getException().toString(), Toast.LENGTH_LONG).show();
                                 updateUI(null);
                             }
                         }
@@ -227,10 +227,38 @@ public class Login extends AppCompatActivity {
 
 //            Toast.makeText(Login.this,personName + personEmail ,Toast.LENGTH_SHORT).show();
             String userId=getUserId(personEmail);
-            Intent intent=new Intent(Login.this,Garbage.class);
-            intent.putExtra("userId",userId);
-            intent.putExtra("current",extractCustomer(userId));
-            startActivity(intent);
+            DatabaseReference curr=FirebaseDatabase.getInstance().getReference("customers").child(userId);
+            curr.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists()){
+                        Customer custo=dataSnapshot.getValue(Customer.class);
+                        if(custo!=null && custo.picked==false){
+                            Intent i=new Intent(Login.this,Pending.class);
+                            i.putExtra("customer",custo);
+                            overridePendingTransition(R.anim.slide_in_right,R.anim.stay);
+                            startActivity(i);
+                            finish();
+                        }else if(custo!=null && custo.picked==true){
+                            Intent i=new Intent(Login.this,Garbage.class);
+                            i.putExtra("customer",custo);
+                            overridePendingTransition(R.anim.slide_in_right,R.anim.stay);
+                            startActivity(i);
+                            finish();
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Toast.makeText(Login.this,databaseError.getMessage().toString(),Toast.LENGTH_SHORT).show();
+                }
+            });
+//            Intent intent=new Intent(Login.this,Garbage.class);
+//            intent.putExtra("userId",userId);
+//            intent.putExtra("current",extractCustomer(userId));
+//            overridePendingTransition(R.anim.slide_in_right,R.anim.stay);
+//            startActivity(intent);
         }
 
     }

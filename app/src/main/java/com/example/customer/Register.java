@@ -111,7 +111,7 @@ public class Register extends AppCompatActivity {
                                             myRef.setValue(customer[0]);
                                         }else
                                             customer[0]=dataSnapshot.getValue(Customer.class);
-                                            Toast.makeText(Register.this,"Registration successful",Toast.LENGTH_LONG).show();
+                                            Toast.makeText(Register.this,"Registration successful",Toast.LENGTH_SHORT).show();
                                             Intent i=new Intent(Register.this,Login.class);
                                             startActivity(i);
                                             finish();
@@ -126,7 +126,7 @@ public class Register extends AppCompatActivity {
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w("random", "createUserWithEmail:failure", task.getException());
-                                Toast.makeText(Register.this, "Authentication failed.",
+                                Toast.makeText(Register.this, task.getException().toString(),
                                         Toast.LENGTH_SHORT).show();
                             }
 
